@@ -3,13 +3,18 @@
 # the robot rotate in a way that the ball stays detected in the center of the image.
 # When the robot detects a ball with a specific color wanted, the LEDs are activated in that color, otherwise they are turned off.
 
-import picamera
+from picamera2 import Picamera2
 import cv2
 import numpy
-from trilobot import *
+from trilobot import Trilobot
 
 # create the robot object
 tbot = Trilobot()
+
+# create the pi camera object
+picam = Picamera2()
+picam.configure(picam.create_preview_configuration(main={"format": 'BGR888', "size": (320, 240)}))
+picam.start()
 
 # RGB Colors
 RED = (255, 0, 0)
@@ -21,15 +26,6 @@ BLACK = (0, 0, 0)
 
 # Color wanted to be tracked
 color_wanted="RED" # it can be "RED", "YELLOW", "GREEN", "BLUE"
-
-def capture_image():
-    with picamera.PiCamera() as camera:
-        camera.resolution = (320, 240)
-        image = numpy.empty((240 * 320 * 3,), dtype=numpy.uint8)
-        camera.capture(image, 'bgr')
-        image = image.reshape((240, 320, 3))
-    
-    return image
   
 def circle_detection(image):  
     # Convert to grayscale.
@@ -149,7 +145,7 @@ def ball_tracking(x,w):
         tbot.set_motor_speeds(-vel, vel)
               
 while True or KeyboardInterrupt:
-    image=capture_image()
+    image = picam.capture_array()
     [num_balls,x,y,r]=circle_detection(image)
     if num_balls>0:
         [color_detected,ball_index,w]=color_detection(image,color_wanted,x,y,r)

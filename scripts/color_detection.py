@@ -2,13 +2,18 @@
 # The object has to be detected within an specific distance in order to make the robot start running the color detection.
 # If the object in front of the robot has a known color, then the LEDs are turned on using the same color, otherwise they are turned off.
 
-import picamera
+from picamera2 import Picamera2
 import cv2
 import numpy
 from trilobot import *
 
 # create the robot object
 tbot = Trilobot()
+
+# create the pi camera object
+picam = Picamera2()
+picam.configure(picam.create_preview_configuration(main={"format": 'BGR888', "size": (320, 240)}))
+picam.start()
 
 # RGB Colors
 RED = (255, 0, 0)
@@ -28,15 +33,6 @@ def distance_detection():
    
     return distance
 
-def capture_image():
-    with picamera.PiCamera() as camera:
-        camera.resolution = (320, 240)
-        image = numpy.empty((240 * 320 * 3,), dtype=numpy.uint8)
-        camera.capture(image, 'bgr')
-        image = image.reshape((240, 320, 3))
-        
-    return image
-  
 def check_color(mask,h,w):
     
     search_top = int(h/2 - h/5)
@@ -119,8 +115,8 @@ def color_detection(image):
         
 while True or KeyboardInterrupt:
     distance=distance_detection()
-    if distance<30: #30cm threshold
-        image=capture_image()
+    if distance<30: #30cm threshold        
+        image = picam.capture_array()
         object_color=color_detection(image)
         print(object_color)
     else:

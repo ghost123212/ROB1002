@@ -11,9 +11,8 @@ An example of how move Trilobot with keyboard.
 print("Trilobot Example: Keyboard Movement\n")
 print("a = left | w = forward | s = reverse | d = right | x = stop | q = increase speed (0-1) | z = decrease speed (0-1) | p = exit program\n")
 
-
 tbot = Trilobot()
- 
+
 def getch():
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
