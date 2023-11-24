@@ -31,6 +31,15 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 WHITE = (255, 255, 255)
+YELLOW = (255, 255, 0)
+BLACK = (0, 0, 0)
+
+LIGHT_FRONT_RIGHT = 0
+LIGHT_FRONT_LEFT = 1
+LIGHT_MIDDLE_LEFT = 2
+LIGHT_REAR_LEFT = 3
+LIGHT_REAR_RIGHT = 4
+LIGHT_MIDDLE_RIGHT = 5
  
 while True:
     char = getch()
@@ -43,31 +52,55 @@ while True:
         print("Left")
         time.sleep(button_delay)
         tbot.turn_left(speed)
-        tbot.fill_underlighting(BLUE)
+        tbot.set_underlight(LIGHT_FRONT_LEFT, YELLOW, show=False)
+        tbot.set_underlight(LIGHT_MIDDLE_LEFT, YELLOW, show=False)
+        tbot.set_underlight(LIGHT_REAR_LEFT, YELLOW, show=False)
+        tbot.set_underlight(LIGHT_FRONT_RIGHT, WHITE, show=False)
+        tbot.set_underlight(LIGHT_MIDDLE_RIGHT, BLACK, show=False)
+        tbot.set_underlight(LIGHT_REAR_RIGHT, RED, show=False)
+        tbot.show_underlighting()
  
     elif (char == "d"):
         print("Right")
         time.sleep(button_delay)
         tbot.turn_right(speed)
-        tbot.fill_underlighting(GREEN)
+        tbot.set_underlight(LIGHT_FRONT_LEFT, WHITE, show=False)
+        tbot.set_underlight(LIGHT_MIDDLE_LEFT, BLACK, show=False)
+        tbot.set_underlight(LIGHT_REAR_LEFT, RED, show=False)
+        tbot.set_underlight(LIGHT_FRONT_RIGHT, YELLOW, show=False)
+        tbot.set_underlight(LIGHT_MIDDLE_RIGHT, YELLOW, show=False)
+        tbot.set_underlight(LIGHT_REAR_RIGHT, YELLOW, show=False)
+        tbot.show_underlighting()
  
     elif (char == "w"):
         print("Forward")
         time.sleep(button_delay)
         tbot.forward(speed)
-        tbot.fill_underlighting(WHITE)
+        tbot.set_underlight(LIGHT_FRONT_LEFT, WHITE, show=False)
+        tbot.set_underlight(LIGHT_MIDDLE_LEFT, BLACK, show=False)
+        tbot.set_underlight(LIGHT_REAR_LEFT, RED, show=False)
+        tbot.set_underlight(LIGHT_FRONT_RIGHT, WHITE, show=False)
+        tbot.set_underlight(LIGHT_MIDDLE_RIGHT, BLACK, show=False)
+        tbot.set_underlight(LIGHT_REAR_RIGHT, RED, show=False)
+        tbot.show_underlighting()
  
     elif (char == "s"):
         print("Reverse")
         time.sleep(button_delay)
         tbot.backward(speed)
-        tbot.fill_underlighting(RED)
+        tbot.set_underlight(LIGHT_FRONT_LEFT, RED, show=False)
+        tbot.set_underlight(LIGHT_MIDDLE_LEFT, BLACK, show=False)
+        tbot.set_underlight(LIGHT_REAR_LEFT, WHITE, show=False)
+        tbot.set_underlight(LIGHT_FRONT_RIGHT, RED, show=False)
+        tbot.set_underlight(LIGHT_MIDDLE_RIGHT, BLACK, show=False)
+        tbot.set_underlight(LIGHT_REAR_RIGHT, WHITE, show=False)
+        tbot.show_underlighting()
  
     elif (char == "x"):
         print("Stop")
         time.sleep(button_delay)
         tbot.stop()
-        tbot.clear_underlighting()
+        tbot.fill_underlighting(RED)
  
     elif (char == "q"):
         print("Increase Speed by 0.1")

@@ -19,6 +19,15 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 WHITE = (255, 255, 255)
+YELLOW = (255, 255, 0)
+BLACK = (0, 0, 0)
+
+LIGHT_FRONT_RIGHT = 0
+LIGHT_FRONT_LEFT = 1
+LIGHT_MIDDLE_LEFT = 2
+LIGHT_REAR_LEFT = 3
+LIGHT_REAR_RIGHT = 4
+LIGHT_MIDDLE_RIGHT = 5
 
 with open(device_path, "rb") as device_file:
     while True:
@@ -36,11 +45,24 @@ with open(device_path, "rb") as device_file:
             if speed > 0:
                 print("Forward")
                 tbot.forward(speed)
-                tbot.fill_underlighting(WHITE)
+                tbot.set_underlight(LIGHT_FRONT_LEFT, WHITE, show=False)
+                tbot.set_underlight(LIGHT_MIDDLE_LEFT, BLACK, show=False)
+                tbot.set_underlight(LIGHT_REAR_LEFT, RED, show=False)
+                tbot.set_underlight(LIGHT_FRONT_RIGHT, WHITE, show=False)
+                tbot.set_underlight(LIGHT_MIDDLE_RIGHT, BLACK, show=False)
+                tbot.set_underlight(LIGHT_REAR_RIGHT, RED, show=False)
+                tbot.show_underlighting()
+
             elif speed <0:
                 print("Reverse")
                 tbot.forward(speed)
-                tbot.fill_underlighting(RED)
+                tbot.set_underlight(LIGHT_FRONT_LEFT, RED, show=False)
+                tbot.set_underlight(LIGHT_MIDDLE_LEFT, BLACK, show=False)
+                tbot.set_underlight(LIGHT_REAR_LEFT, WHITE, show=False)
+                tbot.set_underlight(LIGHT_FRONT_RIGHT, RED, show=False)
+                tbot.set_underlight(LIGHT_MIDDLE_RIGHT, BLACK, show=False)
+                tbot.set_underlight(LIGHT_REAR_RIGHT, WHITE, show=False)
+                tbot.show_underlighting()
 
         if event_type == 2 and event_number == 2: # if event_type is joystick and event_number is right stick left/right
             speed = round(value/32767, 2) # 32767 is the max of the joystick range
@@ -49,11 +71,24 @@ with open(device_path, "rb") as device_file:
             if speed > 0:
                 print("Left")
                 tbot.turn_left(round(speed * - 1, 2)) # *-1 as numbers are negative on joystick for left
-                tbot.fill_underlighting(BLUE)
+                tbot.set_underlight(LIGHT_FRONT_LEFT, YELLOW, show=False)
+                tbot.set_underlight(LIGHT_MIDDLE_LEFT, YELLOW, show=False)
+                tbot.set_underlight(LIGHT_REAR_LEFT, YELLOW, show=False)
+                tbot.set_underlight(LIGHT_FRONT_RIGHT, WHITE, show=False)
+                tbot.set_underlight(LIGHT_MIDDLE_RIGHT, BLACK, show=False)
+                tbot.set_underlight(LIGHT_REAR_RIGHT, RED, show=False)
+                tbot.show_underlighting()
+
             elif speed <0:
                 print("Right")
                 tbot.turn_right(speed)
-                tbot.fill_underlighting(GREEN)
+                tbot.set_underlight(LIGHT_FRONT_LEFT, WHITE, show=False)
+                tbot.set_underlight(LIGHT_MIDDLE_LEFT, BLACK, show=False)
+                tbot.set_underlight(LIGHT_REAR_LEFT, RED, show=False)
+                tbot.set_underlight(LIGHT_FRONT_RIGHT, YELLOW, show=False)
+                tbot.set_underlight(LIGHT_MIDDLE_RIGHT, YELLOW, show=False)
+                tbot.set_underlight(LIGHT_REAR_RIGHT, YELLOW, show=False)
+                tbot.show_underlighting()
 
         if event_type == 1 and event_number == 1: # if event_type is button and event_number is a button press
             print("A button pressed")
