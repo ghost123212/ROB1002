@@ -104,5 +104,6 @@ while True:
 
 
     #img_small = cv2.resize(img, (0,0), fx=0.4, fy=0.4) # reduce image size
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) # convert back to rgb image
     cv2.imshow("Image window", img)
     cv2.waitKey(1)

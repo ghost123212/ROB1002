@@ -53,9 +53,10 @@ while True:
         # and if the area is big enough, we draw the outline
         # of the contour (in blue)
         if a > 100.0:
-            cv2.drawContours(img, c, -1, (0, 0, 255), 10)
+            cv2.drawContours(img, c, -1, (255, 0, 0), 10)
     #print('====')
 
     #img_small = cv2.resize(img, (0,0), fx=0.4, fy=0.4) # reduce image size
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) # convert back to rgb image
     cv2.imshow("Image window", img)
     cv2.waitKey(1)
