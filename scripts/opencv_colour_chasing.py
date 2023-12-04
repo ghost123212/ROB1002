@@ -64,7 +64,7 @@ while True:
         # and if the area is big enough, we draw the outline
         # of the contour (in blue)
         if a > 100.0:
-            cv2.drawContours(img, c, -1, (0, 0, 255), 10)
+            cv2.drawContours(img, c, -1, (255, 0, 0), 10)
     #print('====')
 
     # if there are contours drive the robot left and right to center on the largest contour
