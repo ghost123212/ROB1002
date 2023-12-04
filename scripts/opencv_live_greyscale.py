@@ -4,8 +4,6 @@ import cv2
 
 from picamera2 import Picamera2
 
-# Grab images as numpy arrays and leave everything else to OpenCV.
-
 cv2.startWindowThread()
 
 picam2 = Picamera2()
