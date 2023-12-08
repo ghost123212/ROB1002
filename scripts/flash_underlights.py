@@ -26,10 +26,10 @@ for i in range(LOOPS):
     tbot.fill_underlighting(RED)
     time.sleep(INTERVAL)
 
-    tbot.fill_underlighting(GREEN)
+    tbot.fill_underlighting(BLUE)
     time.sleep(INTERVAL)
 
-    tbot.fill_underlighting(BLUE)
+    tbot.fill_underlighting(GREEN)
     time.sleep(INTERVAL)
 
 # Turn off underlighting
