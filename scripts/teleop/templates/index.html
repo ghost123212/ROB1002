@@ -15,7 +15,7 @@
     <main>
       <!-- Icons from https://icon-sets.iconify.design/mdi/ -->
       <div id="fwd-back">
-        <button class="btn">
+        <button class="btn" id="up">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path
               fill="currentColor"
@@ -23,7 +23,7 @@
             />
           </svg>
         </button>
-        <button class="btn">
+        <button class="btn" id="down">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path fill="currentColor" d="M9 4h6v8h4.84L12 19.84L4.16 12H9z" />
           </svg>
@@ -34,7 +34,7 @@
 
       <div class="controls">
         <div id="left-right">
-          <button class="btn">
+          <button class="btn" id="left">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path
                 fill="currentColor"
@@ -42,7 +42,7 @@
               />
             </svg>
           </button>
-          <button class="btn">
+          <button class="btn" id="right">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path
                 fill="currentColor"
@@ -55,5 +55,7 @@
         <h1 id="hostname">{{ hostname }}</h1>
       </div>
     </main>
+
+    <script src="/app.js"></script>
   </body>
 </html>
