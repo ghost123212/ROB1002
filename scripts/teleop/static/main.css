@@ -21,7 +21,7 @@ body {
 
 #camera {
     height: auto;
-    width: 50%;
+    width: 60%;
     border-radius: 20px;
     user-select: none;
     pointer-events: none;
@@ -75,6 +75,7 @@ h1 {
 main {
     display: flex;
     justify-content: space-around;
+    margin: 20px;
 }
 
 #fwd-back {
@@ -91,4 +92,44 @@ main {
     display: flex;
     flex-direction: column;
     justify-content: center
+}
+
+@media screen and (max-width: 600px) {
+    body { 
+        justify-content: flex-start;
+        align-items: flex-start;
+        margin-top: 10px;
+    }
+
+    main {
+        justify-content: space-around;
+        flex-direction: column;
+        margin: 5px;
+    }
+
+    #fwd-back,
+    #left-right {
+        flex-direction: row;
+        justify-content: center
+    }
+
+    #camera {
+        order: -1;
+        width: 90%;
+        align-self: center;
+    }
+
+    #fwd-back {
+        order: 3;
+    }
+
+
+    #left-right {
+        order: 2;
+    }
+
+    #left-right .btn {
+        background-color: transparent;
+        outline: #48abe0 solid 2px;
+    }
 }
