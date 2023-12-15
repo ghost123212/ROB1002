@@ -11,7 +11,6 @@ sock = Sock(app)
 import time
 from trilobot import Trilobot
 
-speed = 0.5
 tbot = Trilobot()
 
 enable_colour_detect = False
@@ -35,6 +34,8 @@ def script():
 
 @sock.route('/command')
 def command(sock):
+    
+    speed = 0.5
     
     while True:
         cmd = sock.receive().split(':')
