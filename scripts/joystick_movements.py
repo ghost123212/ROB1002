@@ -9,7 +9,7 @@ import struct
 An example of how move Trilobot with Logitech games controller..
 # https://www.socsci.ru.nl/wilberth/computer/joystick.html #
 """
-print("Trilobot Example: Joystick Movement\n")
+print("Trilobot Example: Joystick Movement Using Four Way Joystick Mapping\n")
 
 device_path = "/dev/input/js0"
 

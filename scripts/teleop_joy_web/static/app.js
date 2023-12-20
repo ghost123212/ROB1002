@@ -124,13 +124,11 @@ socket.addEventListener('message', ev => {
 document.getElementById('stop').onclick = ev => {
     ev.preventDefault();
     sendCmd("stop");
-    document.getElementById("status2").innerText = "Drive: Stop";
 };
 
 document.getElementById('stop-mobile').onclick = ev => {
     ev.preventDefault();
     sendCmd("stop");
-    document.getElementById("status2").innerText = "Drive: Stop";
 };
 
 function update()
@@ -142,63 +140,9 @@ function update()
         -x == left
         +x == right
     */
-   /*
-        four movement commands, take circle of joystick as 360 deg so each movement command gets 90 deg each.
-        stright up is 0 deg = forward so 90/2 deg left and right
-        
-        forward         315 to 45
-        right           45 to 135
-        backward        135 to 225
-        left            225 to 315
-   */
-   /*
-        eight movement commands, take circle of joystick as 360 deg so each movement command gets 45 deg each.
-        stright up is 0 deg = forward so 45/2 deg left and right
-        harder to implement
-        
-        forward         337.5 to 22.5
-        forward-right   22.5 to 67.5
-        right           67.5 to 112.5
-        backward-right  112.5 to 157.5
-        backward        157.5 to 202.5
-        backward-left   202.5 to 247.5
-        left            247.5 to 292.5
-        forward-left    292.5 to 337.5
-   */
-
-    if (joystick1.value.y == 0.0)
-    {
-        sendCmd("stop")
-        document.getElementById("status2").innerText = "Drive: Stop";
-    }
-
-    if (joystick1.value.y < 0 && Math.abs(joystick1.value.y) > Math.abs(joystick1.value.x))
-    {
-        sendCmd(`speed:${Math.abs(joystick1.value.y)}`);
-        sendCmd("up")
-        document.getElementById("status2").innerText = "Drive: Forward | Speed: " + JSON.stringify(Math.abs(joystick1.value.y));
-    }
-    
-    if (joystick1.value.y > 0 && Math.abs(joystick1.value.y) > Math.abs(joystick1.value.x))
-    {
-        sendCmd(`speed:${Math.abs(joystick1.value.y)}`);
-        sendCmd("down")
-        document.getElementById("status2").innerText = "Drive: Backward | Speed: " + JSON.stringify(Math.abs(joystick1.value.y));
-    }
-    
-    if (joystick1.value.x < 0 && Math.abs(joystick1.value.x) > Math.abs(joystick1.value.y))
-    {
-        sendCmd(`speed:${Math.abs(joystick1.value.x)}`);
-        sendCmd("left")
-        document.getElementById("status2").innerText = "Drive: Left | Speed: " + JSON.stringify(Math.abs(joystick1.value.x));
-    }
-    
-    if (joystick1.value.x > 0 && Math.abs(joystick1.value.x) > Math.abs(joystick1.value.y))
-    {
-        sendCmd(`speed:${Math.abs(joystick1.value.x)}`);
-        sendCmd("right")
-        document.getElementById("status2").innerText = "Drive: Right | Speed: " + JSON.stringify(Math.abs(joystick1.value.x));
-    }
+        // send joystick x,y vales to python script
+        sendCmd(`joy_x:${joystick1.value.x}`);
+        sendCmd(`joy_y:${joystick1.value.y}`);
 }
 
 function loop()

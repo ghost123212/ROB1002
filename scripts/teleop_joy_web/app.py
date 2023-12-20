@@ -4,6 +4,7 @@ import socket
 import cv2
 from picamera2 import Picamera2
 import numpy as np
+import math
 
 app = Flask(__name__)
 sock = Sock(app)
@@ -14,6 +15,9 @@ from trilobot import Trilobot
 tbot = Trilobot()
 
 enable_colour_detect = False
+four_way_mapping = False
+eight_way_mapping = True
+motor_speed_mapping = False
 
 picam2 = Picamera2()
 picam2.configure(picam2.create_preview_configuration(main={"format": 'BGR888', "size": (640, 480)})) # opencv works in BGR not RGB
@@ -36,8 +40,8 @@ def script():
 def command(sock):
     
     speed = 0.5
-    speed_left = 0.5
-    speed_right = 0.5
+    joy_x = 0
+    joy_y = 0
     
     while True:
         # trilobot movement commands
@@ -58,28 +62,86 @@ def command(sock):
         # tbot.stop() # stop quickly
         # tbot.coast()  # Come to a halt gently
 
+        # joystick x,y directions
+        # -y == up
+        # +y == down
+        # -x == left
+        # +x == right
+
         cmd = sock.receive().split(':')
 
-        if cmd[0] == "left":
-            tbot.turn_left(speed)
+        if cmd[0] == "joy_x":
+            joy_x = float(cmd[1])
 
-        elif cmd[0] == "right":
-            tbot.turn_right(speed)
-
-        elif cmd[0] == "up":
-            tbot.forward(speed)
-
-        elif cmd[0] == "down":
-            tbot.backward(speed)
-
-        elif cmd[0] == "stop":
-            tbot.stop()
-
-        elif cmd[0] == "speed":
-            speed = float(cmd[1])
+        elif cmd[0] == "joy_y":
+            joy_y = float(cmd[1])
 
         else: 
-            print("send either `up` `down` `left` `right` or `stop` to move your robot!")
+            print("movement command error")
+
+        if four_way_mapping:
+            if (joy_x == 0.0 and joy_y == 0.0):
+                tbot.stop()
+
+            elif (joy_y < 0 and abs(joy_y) > abs(joy_x)):
+                speed = abs(joy_y)
+                tbot.forward(speed)
+            
+            elif (joy_y > 0 and abs(joy_y) > abs(joy_x)):
+                speed = abs(joy_y)
+                tbot.backward(speed)
+            
+            elif (joy_x < 0 and abs(joy_x) > abs(joy_y)):
+                speed = abs(joy_x)
+                tbot.turn_left(speed)
+            
+            elif (joy_x > 0 and abs(joy_x) > abs(joy_y)):
+                speed = abs(joy_x)
+                tbot.turn_right(speed)
+        
+        if eight_way_mapping:
+            # Determine the magnitude and direction of the joystick input
+            speed = math.sqrt(joy_x ** 2 + joy_y ** 2)
+            angle = math.atan2(joy_y, joy_x)
+
+            # Check the direction based on angle and magnitude
+            if (joy_x == 0.0 and joy_y == 0.0):
+                tbot.stop()
+            elif -math.pi / 8 <= angle < math.pi / 8:       
+                tbot.turn_right(speed)
+            elif math.pi / 8 <= angle < 3 * math.pi / 8:
+                tbot.curve_backward_right(speed)
+            elif 3 * math.pi / 8 <= angle < 5 * math.pi / 8:
+                tbot.backward(speed)
+            elif 5 * math.pi / 8 <= angle < 7 * math.pi / 8:
+                tbot.curve_backward_left(speed)
+            elif (7 * math.pi / 8 <= angle <= math.pi) or (-math.pi <= angle < -7 * math.pi / 8):
+                tbot.turn_left(speed)
+            elif -7 * math.pi / 8 <= angle < -5 * math.pi / 8:
+                tbot.curve_forward_left(speed)
+            elif -5 * math.pi / 8 <= angle < -3 * math.pi / 8:
+                tbot.forward(speed)
+            elif -3 * math.pi / 8 <= angle < -math.pi / 8:
+                tbot.curve_forward_right(speed)
+
+        if motor_speed_mapping:
+            if (joy_x == 0.0 and joy_y == 0.0):
+                tbot.stop()
+
+            joy_x *= -1
+            joy_y *= -1
+
+            # Assuming joy_x and joy_y are in the range of -1 to 1
+            max_joystick_value = 1.0
+
+            # Map joy_x and joy_y to motor speeds
+            left_speed = max_joystick_value * (joy_y + joy_x)
+            right_speed = max_joystick_value * (joy_y - joy_x)
+
+            left_speed = max(-1.0, min(1.0, left_speed))
+            right_speed = max(-1.0, min(1.0, right_speed))
+
+            tbot.set_motor_speeds(left_speed, right_speed)
 
 def colour_detect(_img):
     hsv_img = cv2.cvtColor(_img, cv2.COLOR_BGR2HSV) # convert to hsv image
