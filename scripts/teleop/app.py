@@ -61,39 +61,11 @@ def command(sock):
         else: 
             print("send either `up` `down` `left` `right` or `stop` to move your robot!")
 
-def colour_detect(_img):
-    hsv_img = cv2.cvtColor(_img, cv2.COLOR_BGR2HSV) # convert to hsv image
-
-    # Create a binary (mask) image, HSV = hue (colour) (0-180), saturation  (0-255), value (brightness) (0-255)
-    hsv_thresh = cv2.inRange(hsv_img,
-                                np.array((50, 0, 0)), # lower range
-                                np.array((80, 255, 255))) # upper range
-
-    # Find the contours in the mask generated from the HSV image
-    hsv_contours, hierachy = cv2.findContours(
-        hsv_thresh.copy(),
-        cv2.RETR_TREE,
-        cv2.CHAIN_APPROX_SIMPLE)
-    
-        
-    # In hsv_contours we now have an array of individual closed contours (basically a polgon around the blobs in the mask). Let's iterate over all those found contours.
-    for c in hsv_contours:
-        # This allows to compute the area (in pixels) of a contour
-        a = cv2.contourArea(c)
-        # and if the area is big enough, we draw the outline
-        # of the contour (in blue)
-        if a > 100.0:
-            cv2.drawContours(_img, c, -1, (255, 0, 0), 10)
-
-    return _img
-
 # From https://www.aranacorp.com/en/stream-video-from-a-raspberry-pi-to-a-web-browser/
 def video_gen():
     """Video streaming generator function."""
     while True:
         img = picam2.capture_array()
-        if enable_colour_detect:
-            img = colour_detect(img)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) # convert back to rgb image
         ret, jpeg = cv2.imencode('.jpg', img)
         frame=jpeg.tobytes()
