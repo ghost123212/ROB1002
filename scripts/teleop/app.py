@@ -13,8 +13,6 @@ from trilobot import Trilobot
 
 tbot = Trilobot()
 
-enable_colour_detect = False
-
 picam2 = Picamera2()
 picam2.configure(picam2.create_preview_configuration(main={"format": 'BGR888', "size": (640, 480)})) # opencv works in BGR not RGB
 picam2.start()
@@ -38,13 +36,30 @@ def command(sock):
     speed = 0.5
     
     while True:
+        # trilobot movement commands
+        # tbot.forward(speed)
+        # tbot.backward(speed)
+        # tbot.turn_left(speed)
+        # tbot.turn_right(speed)
+
+        # tbot.set_left_speed(speed)
+        # tbot.set_right_speed(speed)
+        # tbot.set_motor_speeds(left_speed, right_speed)
+
+        # tbot.curve_forward_right(speed)
+        # tbot.curve_forward_left(speed)
+        # tbot.curve_backward_right(speed)
+        # tbot.curve_backward_left(speed)
+
+        # tbot.stop() # stop quickly
+        # tbot.coast()  # Come to a halt gently
         cmd = sock.receive().split(':')
 
         if cmd[0] == "left":
-            tbot.curve_forward_left(speed)
+            tbot.turn_left(speed)
 
         elif cmd[0] == "right":
-            tbot.curve_forward_right(speed)
+            tbot.turn_right(speed)
 
         elif cmd[0] == "up":
             tbot.forward(speed)
